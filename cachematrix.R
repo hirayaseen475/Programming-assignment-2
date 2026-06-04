@@ -1,14 +1,17 @@
 ## This function creates a matrix that caches the value of its inverse
 
 makeCacheMatrix <- function(x = matrix()) {
-  m <- NULL
+  matrix_inverse <- NULL #sets inverse to be null until calculated
+  
+  #to set the matrix
   set <- function(y) {
     x <<- y
-    m <<- NULL
+    matrix_inverse <<- NULL
   }
+  #to get the matrix inverse from this function
   get <- function() x
-  setmatrix <- function(solve) m <<- solve
-  getmatrix <- function() m
+  setmatrix <- function(solve) matrix_inverse <<- solve
+  getmatrix <- function() matrix_inverse
   list(set = set, get = get,
        setmatrix = setmatrix,
        getmatrix = getmatrix)
@@ -19,15 +22,15 @@ makeCacheMatrix <- function(x = matrix()) {
 ## to solve for the inverse, and retrieve cached inverse from 'makeCacheMatrix()' when called if it has already been calculated
 
 cacheSolve <- function(x, ...) {
-  m <- x$getmatrix()
-  if(!is.null(m)) {
-    message("getting cached data")
-    return(m)
+  matrix_inverse <- x$getmatrix() #to get the matrix inverse from the first function
+  if(!is.null(matrix_inverse)) {
+    message("getting cached data") #to print this message when retrieving cached data if already calculated
+    return(matrix_inverse) #retrieve cached data if already calculated
   }
-  data <- x$get()
-  m <- solve(data, ...)
-  x$setmatrix(m)
-  m
+  data <- x$get() #to get initialized matrix
+  matrix_inverse <- solve(data, ...) #solve for inverse
+  x$setmatrix(matrix_inverse) #set inverse as new output value
+  matrix_inverse #return the inverse
 }
 
 my_matrix <- makeCacheMatrix(matrix(c(1, 2, 3, 4), nrow = 2, ncol = 2)) #to initialize matrix for testing
